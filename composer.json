@@ -1,0 +1,32 @@
+{
+  "name": "piksera-packages/composer-client",
+  "description": "Composer Client",
+  "authors": [
+    {
+      "name": "Piksera",
+      "email": "info@piksera.com"
+    },
+    {
+      "name": "Noah Wells",
+      "email": "noah@piksera.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.0 || ^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "PikseraPackages\\": "src/"
+    }
+  },
+  "prefer-stable": true,
+  "homepage": "http://piksera.com",
+  "license": "MIT",
+  "support": {
+    "email": "support@piksera.com"
+  }
+}
