@@ -16,7 +16,7 @@ class Client
 
  
     public $updaterServers = [
-        'https://pikserapi.com/', // Local API server
+        'https://pikserapi.com/', 
     ];
     
 
@@ -115,6 +115,36 @@ class Client
         $license->due_on = $licenseDetails['nextduedate'] ?? null;
     
         $license->save();
+    }
+    
+    public function fetchPackageList() {
+        $url = $this->packageServers[0]; 
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 30,
+        ]);
+    
+        $response = curl_exec($curl);
+        curl_close($curl);
+        if (!$response) {
+            // Include the static entry even if the fetch fails
+            return [
+                'modules/white_label' => 'Piksera White Label'
+            ];
+        }
+    
+        $data = json_decode($response, true);
+        $packages = $data['packages'] ?? [];
+        $result = [
+            'modules/white_label' => 'Piksera White Label'
+        ];
+        foreach ($packages as $relType => $details) {
+            $description = $details[array_key_first($details)]['description'] ?? "No description available"; 
+            $result[$relType] = $description;
+        }
+        return $result;
     }
     
     
@@ -218,7 +248,7 @@ class Client
         if (!empty($headers)) {
             $opts[CURLOPT_HTTPHEADER] = $headers;
         }
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // Skip SSL Verification
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); 
     
         curl_setopt_array($curl, $opts);
     
